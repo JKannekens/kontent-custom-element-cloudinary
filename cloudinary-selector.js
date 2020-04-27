@@ -1,3 +1,4 @@
+var currentValue = null;
 var isDisabled = true;
 
 function updateDisabled(disabled) {
@@ -17,6 +18,16 @@ function renderSelected(images) {
   const $clear = $(".clearbtn").hide();
 
   if (images && images.length) {
+    $titleText.text("Selected images");
+    $titleText.addClass("title--selected");
+    $clear.show();
+
+    for (var i = 0; i < images.length; i++) {
+      const image = images[i];
+      if (image && image.public_id) {
+        imageTile($selected, image, remove);
+      }
+    }
   } else {
     $titleText.text("No image selected");
     $titleText.removeClass("title--selected");
@@ -24,7 +35,65 @@ function renderSelected(images) {
   updateSize();
 }
 
+function updateValue(images) {
+  // Send updated value to Kentico (send null in case of the empty string => element will not meet required condition).
+  if (!isDisabled) {
+    if (images && images.length) {
+      currentValue = images;
+      CustomElement.setValue(JSON.stringify(images));
+      renderSelected(images);
+    } else {
+      currentValue = null;
+      CustomElement.setValue(null);
+      renderSelected(null);
+    }
+  }
+}
+
+function remove(public_id) {
+  const images = currentValue || [];
+  const newImages = images.filter((image) => image.public_id !== public_id);
+
+  updateValue(newImages);
+}
+
+function imageTile($parent, item, remove) {
+  const $tile = $(
+    `<div class="tile" title="${item.public_id}"></div>`
+  ).appendTo($parent);
+
+  const $actions = $('<div class="actions"></div>').appendTo($tile);
+
+  $(
+    `<div class="action remove" title="Remove"><i class="icon-remove"></i></div>`
+  )
+    .appendTo($actions)
+    .click(function () {
+      remove(item.public_id);
+    });
+
+  if (item.secure_url) {
+    const $preview = $('<div class="preview"></div>').appendTo($tile);
+
+    $('<img draggable="false" class="thumbnail" />')
+      .attr("src", item.secure_url)
+      .appendTo($preview)
+      .on("load", updateSize);
+  } else {
+    $('<div class="noimage">No image available</div>').appendTo($tile);
+  }
+
+  const $info = $(`<div class="info"></div>`).appendTo($tile);
+  $(`<div class="name">${item.public_id}</div>`).appendTo($info);
+
+  updateSize();
+}
+
 function setupSelector(value) {
+  $(".clear").click(function () {
+    updateValue(null);
+  });
+
   if (value) {
     currentValue = JSON.parse(value);
     renderSelected(currentValue);
@@ -56,9 +125,7 @@ function initCustomElement() {
         },
         {
           insertHandler: function (data) {
-            data.assets.forEach((asset) => {
-              console.log("Inserted asset:", JSON.stringify(asset, null, 2));
-            });
+            updateValue(data.assets);
           },
         },
         document.getElementById("open-btn")
