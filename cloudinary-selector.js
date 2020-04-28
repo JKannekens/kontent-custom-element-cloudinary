@@ -3,7 +3,7 @@ var currentValue = null;
 var isDisabled = true;
 
 function updateDisabled(disabled) {
-  const elements = $(".myBtn");
+  const elements = $(".selector").add(".remove").add(".spacer");
   if (disabled) {
     elements.hide();
   } else {
@@ -16,7 +16,7 @@ function updateDisabled(disabled) {
 function renderSelected(images) {
   const $selected = $(".selected").empty();
   const $titleText = $(".title").find(".text");
-  const $clear = $(".clearbtn").hide();
+  const $clear = $(".btn--destructive").hide();
 
   if (images && images.length) {
     $titleText.text("Selected images");
@@ -30,7 +30,7 @@ function renderSelected(images) {
       }
     }
   } else {
-    $titleText.text("No image selected");
+    $titleText.text("No assets selected");
     $titleText.removeClass("title--selected");
   }
   updateSize();
@@ -99,7 +99,7 @@ function setupSelector(value) {
     currentValue = JSON.parse(value);
     renderSelected(currentValue);
   } else {
-    renderSelected();
+    renderSelected(null);
   }
   // Reacts to window resize to adjust the height
   window.addEventListener("resize", updateSize);
@@ -134,8 +134,8 @@ function initCustomElement() {
         document.getElementById("open-btn")
       );
 
-      updateDisabled(element.disabled);
       setupSelector(element.value);
+      updateDisabled(element.disabled);
       updateSize();
     });
 
@@ -145,6 +145,7 @@ function initCustomElement() {
     // Sends message to console and editor if initialization failed (for example, the page is displayed outside the Kontent UI)
     console.error(err);
     setupSelector();
+    updateDisabled(true);
   }
 }
 
