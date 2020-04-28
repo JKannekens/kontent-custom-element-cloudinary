@@ -1,3 +1,4 @@
+var config = null;
 var currentValue = null;
 var isDisabled = true;
 
@@ -116,11 +117,13 @@ function updateSize() {
 function initCustomElement() {
   try {
     CustomElement.init((element, _context) => {
+      // Setup with initial value and disabled state
+      config = element.config || {};
       window.ml = cloudinary.createMediaLibrary(
         {
-          cloud_name: "dax3wfmka",
-          api_key: "183936946851659",
-          button_class: "myBtn",
+          cloud_name: config.cloudName,
+          api_key: config.apiKey,
+          button_class: "btn btn--primary",
           button_caption: "Select Assets",
         },
         {
