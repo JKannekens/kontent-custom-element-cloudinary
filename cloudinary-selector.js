@@ -58,7 +58,7 @@ function remove(public_id) {
   updateValue(newImages);
 }
 
-function imageTile($parent, item, delete) {
+function imageTile($parent, item, remove) {
   const $tile = $(
     `<div class="tile" title="${item.public_id}"></div>`
   ).appendTo($parent);
