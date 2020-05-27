@@ -26,7 +26,7 @@ function renderSelected(images) {
     for (var i = 0; i < images.length; i++) {
       const image = images[i];
       if (image && image.public_id) {
-        imageTile($selected, image, remove);
+        imageTile($selected, image);
       }
     }
   } else {
@@ -58,7 +58,7 @@ function remove(public_id) {
   updateValue(newImages);
 }
 
-function imageTile($parent, item, remove) {
+function imageTile($parent, item) {
   const $tile = $(
     `<div class="tile" title="${item.public_id}"></div>`
   ).appendTo($parent);
