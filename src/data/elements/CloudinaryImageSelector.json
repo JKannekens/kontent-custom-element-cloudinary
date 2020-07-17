@@ -1,0 +1,9 @@
+{
+    "title": "Cloudinary Image Selector",
+    "description": "The Cloudinary Image Selector allows to search images in Cloudinary DAM and use them in your website.",
+    "thumbnailUrl": "../assets/cloudinary-custom-element.gif",
+    "readmeUrl": "https://github.com/JKannekens/kontent-custom-element-cloudinary",
+    "categories": [
+      "Images"
+    ]
+  }
