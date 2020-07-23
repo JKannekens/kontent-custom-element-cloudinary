@@ -1,7 +1,7 @@
 ![alt text](https://github.com/JKannekens/kontent-custom-element-cloudinary/blob/master/src/data/assets/cloudinary-custom-element.gif "Cloudinary Assets Selector")
 
 # Cloudinary asset selector for Kentico Kontent
-This repository contains the source code of Cloudinary asset selector custom element for Kentico Kontent.
+This repository contains the source code of Cloudinary asset selector custom element for Kentico Kontent. Created by <a href="https://www.truelime.nl/">TrueLime</a>
 
 ## Setup
 1. Deploy the code to a secure public host
