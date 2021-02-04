@@ -40,6 +40,7 @@ body {
   position: relative;
   height: 224px;
   width: 30%;
+  min-width: 224px;
   cursor: pointer;
   background-color: #f5f5f5;
   border-radius: 2px;
@@ -61,6 +62,12 @@ body {
   width: 100%;
   cursor: default;
   background-color: hsla(0, 0%, 96.1%, 0.85);
+}
+.tile .preview {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .tile .actions .action i {
   padding: 8px 10px;

@@ -1,6 +1,7 @@
 var config = null;
 var currentValue = null;
 var isDisabled = true;
+var isVisible = false;
 
 function updateDisabled(disabled) {
   const elements = $(".selector").add(".remove").add(".spacer");
@@ -72,12 +73,16 @@ function imageTile($parent, item) {
     .click(function () {
       remove(item.public_id);
     });
+  
+  var previewUrl = item.resource_type === "video" ? 
+      changeExt(item.secure_url, ".jpg") :
+      item.secure_url;  
 
-  if (item.secure_url) {
+  if (previewUrl) {
     const $preview = $('<div class="preview"></div>').appendTo($tile);
 
     $('<img draggable="false" class="thumbnail" />')
-      .attr("src", item.secure_url)
+      .attr("src", previewUrl)
       .appendTo($preview)
       .on("load", updateSize);
   } else {
@@ -88,6 +93,13 @@ function imageTile($parent, item) {
   $(`<div class="name">${item.public_id}</div>`).appendTo($info);
 
   updateSize();
+}
+  
+function changeExt(fileName, newExt) {
+  var pos = fileName.includes(".") ? fileName.lastIndexOf(".") : fileName.length
+  var fileRoot = fileName.substr(0, pos)
+  var output = `${fileRoot}${newExt}`
+  return output
 }
 
 function setupSelector(value) {
@@ -107,10 +119,10 @@ function setupSelector(value) {
 
 function updateSize() {
   // Update the custom element height in the Kentico UI.
-  const height = isDisabled
-    ? Math.ceil($("html").height())
-    : window.screen.height - 300;
-
+  const height = isVisible ? 
+    (window.screen.height - 300) :
+    Math.ceil($("html").height());
+  
   CustomElement.setHeight(height);
 }
 
@@ -128,7 +140,16 @@ function initCustomElement() {
         },
         {
           insertHandler: function (data) {
+            isVisible = false;
             updateValue(data.assets);
+          },
+          showHandler: () => {
+            isVisible = true;
+            updateSize();
+          },
+          hideHandler: () => {
+            isVisible = false;
+            updateSize();
           },
         },
         document.getElementById("open-btn")
