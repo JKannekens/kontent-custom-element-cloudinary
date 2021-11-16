@@ -42,9 +42,13 @@ function updateValue(images) {
   if (!isDisabled) {
     if (images && images.length) {
       currentValue = currentValue + images;
-      const ids = currentValue.map(o => o.public_id);
+      console.log(images);
 
-      currentValue = currentValue.filter((image, index) => !ids.includes(image.public_id, index + 1))
+      if(currentValue) {
+        const ids = currentValue.map(o => o.public_id);
+        currentValue = currentValue.filter((image, index) => !ids.includes(image.public_id, index + 1))
+      }
+      
       CustomElement.setValue(JSON.stringify(currentValue));
       renderSelected(currentValue);
     } else {
