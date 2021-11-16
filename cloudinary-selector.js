@@ -41,12 +41,13 @@ function updateValue(images) {
   // Send updated value to Kentico (send null in case of the empty string => element will not meet required condition).
   if (!isDisabled) {
     if (images && images.length) {
-      currentValue = currentValue + images;
-      console.log(images);
 
       if(currentValue) {
+        currentValue = currentValue + images;
         const ids = currentValue.map(o => o.public_id);
         currentValue = currentValue.filter((image, index) => !ids.includes(image.public_id, index + 1))
+      } else {
+        currentValue = images;
       }
       
       CustomElement.setValue(JSON.stringify(currentValue));
