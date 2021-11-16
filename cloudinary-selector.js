@@ -20,7 +20,7 @@ function renderSelected(images) {
   const $clear = $(".btn--destructive").hide();
 
   if (images && images.length) {
-    $titleText.text("Selected images");
+    $titleText.text("Selected assets");
     $titleText.addClass("title--selected");
     $clear.show();
 
@@ -42,7 +42,7 @@ function updateValue(images, removeEvent = false) {
   if (!isDisabled) {
     if (images && images.length) {
 
-      if(currentValue || !removeEvent) {
+      if(currentValue && !removeEvent) {
         currentValue = currentValue.concat(images);
         const ids = currentValue.map(o => o.public_id);
         currentValue = currentValue.filter((image, index) => !ids.includes(image.public_id, index + 1))
@@ -84,7 +84,7 @@ function imageTile($parent, item) {
   
   var previewUrl = null;
   var thumbnail = "thumbnail"; 
-  
+
   switch(item.resource_type) {
     case 'image':
       if (item.format === 'pdf') {
