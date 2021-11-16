@@ -37,12 +37,12 @@ function renderSelected(images) {
   updateSize();
 }
 
-function updateValue(images) {
+function updateValue(images, removeEvent = false) {
   // Send updated value to Kentico (send null in case of the empty string => element will not meet required condition).
   if (!isDisabled) {
     if (images && images.length) {
 
-      if(currentValue) {
+      if(currentValue || removeEvent) {
         currentValue = currentValue.concat(images);
         const ids = currentValue.map(o => o.public_id);
         currentValue = currentValue.filter((image, index) => !ids.includes(image.public_id, index + 1))
@@ -64,7 +64,7 @@ function remove(public_id) {
   const images = currentValue || [];
   const newImages = images.filter((image) => image.public_id !== public_id);
 
-  updateValue(newImages);
+  updateValue(newImages, true);
 }
 
 function imageTile($parent, item) {
@@ -82,9 +82,21 @@ function imageTile($parent, item) {
       remove(item.public_id);
     });
   
-  var previewUrl = item.resource_type !== "image" ? 
-      changeExt(item.secure_url, ".jpg") :
-      item.secure_url;  
+  var previewUrl = null; 
+  switch(item.resource_type) {
+    case 'image':
+      if (item.format === 'pdf') {
+        changeExt(item.secure_url, ".jpg");
+      }
+      previewUrl = item.secure_url;
+      break;
+    case 'video':
+      previewUrl = changeExt(item.secure_url, ".jpg");
+      break;
+    case 'raw':
+      previewUrl = 'noPreview.png'
+      break;
+  }     
 
   if (previewUrl) {
     const $preview = $('<div class="preview"></div>').appendTo($tile);
