@@ -82,7 +82,9 @@ function imageTile($parent, item) {
       remove(item.public_id);
     });
   
-  var previewUrl = null; 
+  var previewUrl = null;
+  var thumbnail = "thumbnail"; 
+  
   switch(item.resource_type) {
     case 'image':
       if (item.format === 'pdf') {
@@ -95,15 +97,17 @@ function imageTile($parent, item) {
       previewUrl = changeExt(item.secure_url, ".jpg");
       break;
     case 'raw':
-      previewUrl = 'noPreview.png'
+      previewUrl = 'noPreview.png';
+      thumbnail = 'thumbnail-small';
       break;
   }     
 
   if (previewUrl) {
     const $preview = $('<div class="preview"></div>').appendTo($tile);
 
-    $('<img draggable="false" class="thumbnail" />')
+    $('<img draggable="false" />')
       .attr("src", previewUrl)
+      .attr("class", thumbnail)
       .appendTo($preview)
       .on("load", updateSize);
   } else {
