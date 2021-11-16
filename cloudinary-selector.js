@@ -41,9 +41,12 @@ function updateValue(images) {
   // Send updated value to Kentico (send null in case of the empty string => element will not meet required condition).
   if (!isDisabled) {
     if (images && images.length) {
-      currentValue = images;
-      CustomElement.setValue(JSON.stringify(images));
-      renderSelected(images);
+      currentValue = currentValue + images;
+      const ids = currentValue.map(o => o.public_id);
+
+      currentValue = currentValue.filter((image, index) => !ids.includes(image.public_id, index + 1))
+      CustomElement.setValue(JSON.stringify(currentValue));
+      renderSelected(currentValue);
     } else {
       currentValue = null;
       CustomElement.setValue(null);
@@ -74,7 +77,7 @@ function imageTile($parent, item) {
       remove(item.public_id);
     });
   
-  var previewUrl = item.resource_type === "video" ? 
+  var previewUrl = item.resource_type !== "image" ? 
       changeExt(item.secure_url, ".jpg") :
       item.secure_url;  
 
