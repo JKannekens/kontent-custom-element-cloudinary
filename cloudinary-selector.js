@@ -43,7 +43,7 @@ function updateValue(images) {
     if (images && images.length) {
 
       if(currentValue) {
-        currentValue = currentValue + images;
+        currentValue = currentValue.concat(images);
         const ids = currentValue.map(o => o.public_id);
         currentValue = currentValue.filter((image, index) => !ids.includes(image.public_id, index + 1))
       } else {
