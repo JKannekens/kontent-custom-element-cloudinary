@@ -42,7 +42,7 @@ function updateValue(images, removeEvent = false) {
   if (!isDisabled) {
     if (images && images.length) {
 
-      if(currentValue || removeEvent) {
+      if(currentValue || !removeEvent) {
         currentValue = currentValue.concat(images);
         const ids = currentValue.map(o => o.public_id);
         currentValue = currentValue.filter((image, index) => !ids.includes(image.public_id, index + 1))
@@ -86,7 +86,8 @@ function imageTile($parent, item) {
   switch(item.resource_type) {
     case 'image':
       if (item.format === 'pdf') {
-        changeExt(item.secure_url, ".jpg");
+        previewUrl = changeExt(item.secure_url, ".jpg");
+        break;
       }
       previewUrl = item.secure_url;
       break;
